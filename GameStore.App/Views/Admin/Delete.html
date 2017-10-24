@@ -1,0 +1,67 @@
+﻿<div class="row">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <main class="text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="text-center"><h1 class="display-3">Delete Game</h1></div>
+                        <br />
+                        <form method="post" action="/admin/destroy?id={{{id}}}">
+                            <div class="form-group row">
+                                <label class="form-control-label">Title</label>
+                                <input required disabled name="Title" pattern="[A-Z].{3,100}" class="form-control"
+                                       placeholder="Enter Game Title" value="{{{title}}}" />
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="form-control-label">Description</label>
+                                <textarea required disabled name="Description" class="form-control" placeholder="Enter Game Description" minlength="20">{{{description}}}</textarea>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="form-control-label">Thumbnail</label>
+                                <input required disabled name="ThumbnailUrl" type="url" class="form-control" placeholder="Enter URL to Image" value="{{{thumbnail}}}" />
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="form-control-label">Price</label>
+                                <div class="input-group">
+
+                                    <input required disabled type="number" name="Price" step="0.01" min="0" class="form-control" placeholder="Enter Price" value="{{{price}}}" />
+                                    <span class="input-group-addon">&euro;</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="form-control-label">Size</label>
+                                <div class="input-group">
+
+                                    <input required disabled type="number" name="Size" step="0.1" min="0" class="form-control" placeholder="Enter Size" value="{{{size}}}" />
+                                    <span class="input-group-addon">GB</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="form-control-label">YouTube Video URL</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">https://www.youtube.com/watch?v=</span>
+                                    <input required disabled name="VideoId" class="form-control" minlength="11" maxlength="11" value="{{{video-id}}}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="form-control-label">Release Date</label>
+                                <input required disabled name="ReleaseDate" type="date" class="form-control" placeholder="yyyy-MM-dd" value="{{{release-date}}}" />
+                            </div>
+
+                            <input type="submit" id="btn-delete-game" class="btn btn-outline-danger btn-lg btn-block"
+                                   value="Delete Game" />
+                        </form>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
