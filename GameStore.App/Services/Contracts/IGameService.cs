@@ -1,7 +1,6 @@
 ﻿namespace GameStore.App.Services.Contracts
 {
     using Data.Models;
-    using Models.Games;
     using System;
     using System.Collections.Generic;
 
@@ -30,6 +29,10 @@
 
         Game GetById(int id);
 
-        IEnumerable<GameListingAdminModel> All();
+        bool Exists(int id);
+
+        IEnumerable<TModel> ByIds<TModel>(IEnumerable<int> ids);
+
+        IEnumerable<TModel> All<TModel>(int? userId = null);
     }
 }

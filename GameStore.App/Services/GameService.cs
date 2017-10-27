@@ -1,9 +1,9 @@
 ﻿namespace GameStore.App.Services
 {
+    using AutoMapper.QueryableExtensions;
     using Contracts;
     using Data;
     using Data.Models;
-    using Models.Games;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -26,22 +26,19 @@
             string videoId,
             DateTime releaseDate)
         {
-            using (var db = new GameStoreDbContext())
+            var game = new Game
             {
-                var game = new Game
-                {
-                    Title = title,
-                    Description = description,
-                    Price = price,
-                    Size = size,
-                    ThumbnailUrl = thumbnailUrl,
-                    VideoId = videoId,
-                    ReleaseDate = releaseDate
-                };
+                Title = title,
+                Description = description,
+                Price = price,
+                Size = size,
+                ThumbnailUrl = thumbnailUrl,
+                VideoId = videoId,
+                ReleaseDate = releaseDate
+            };
 
-                db.Games.Add(game);
-                db.SaveChanges();
-            }
+            this.db.Games.Add(game);
+            this.db.SaveChanges();
         }
 
         public void Update(
@@ -78,17 +75,27 @@
         public Game GetById(int id)
             => this.db.Games.Find(id);
 
-        public IEnumerable<GameListingAdminModel> All()
-        {
-            return this.db
+        public bool Exists(int id)
+            => this.db.Games.Any(g => g.Id == id);
+
+        public IEnumerable<TModel> ByIds<TModel>(IEnumerable<int> ids)
+            => this.db
                 .Games
-                .Select(g => new GameListingAdminModel
-                {
-                    Id = g.Id,
-                    Name = g.Title,
-                    Price = g.Price,
-                    Size = g.Size
-                })
+                .Where(g => ids.Contains(g.Id))
+                .ProjectTo<TModel>()
+                .ToList();
+
+        public IEnumerable<TModel> All<TModel>(int? userId = null)
+        {
+            var query = this.db.Games.AsQueryable();
+
+            if (userId != null)
+            {
+                query = query.Where(g => g.Orders.Any(o => o.UserId == userId));
+            }
+
+            return query
+                .ProjectTo<TModel>()
                 .ToList();
         }
     }

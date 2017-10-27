@@ -2,6 +2,7 @@
 {
     using Data;
     using Data.Models;
+    using SimpleMvc.Framework.Contracts;
     using SimpleMvc.Framework.Controllers;
     using System.Linq;
 
@@ -13,6 +14,7 @@
             this.ViewModel["userDisplay"] = "none";
             this.ViewModel["adminDisplay"] = "none";
             this.ViewModel["show-error"] = "none";
+            this.ViewModel["show-success"] = "none";
         }
 
         protected User Profile { get; private set; }
@@ -22,6 +24,18 @@
             this.ViewModel["show-error"] = "block";
             this.ViewModel["error"] = error;
         }
+
+        protected void ShowSuccess(string successMessage)
+        {
+            this.ViewModel["show-success"] = "block";
+            this.ViewModel["success"] = successMessage;
+        }
+
+        protected IActionResult RedirectToHome()
+            => this.Redirect("/");
+
+        protected IActionResult RedirectToLogin()
+            => this.Redirect("/users/login");
 
         protected override void InitializeController()
         {

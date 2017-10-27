@@ -1,7 +1,6 @@
 ﻿namespace GameStore.App.Controllers
 {
     using Models.Users;
-    using Services;
     using Services.Contracts;
     using SimpleMvc.Framework.Attributes.Methods;
     using SimpleMvc.Framework.Contracts;
@@ -38,7 +37,7 @@
 
             if (result)
             {
-                return this.Redirect("/users/login");
+                return this.RedirectToLogin();
             }
             else
             {
@@ -61,7 +60,7 @@
             if (this.users.UserExists(model.Email, model.Password))
             {
                 this.SignIn(model.Email);
-                return this.Redirect("/");
+                return this.RedirectToHome();
             }
             else
             {
@@ -73,7 +72,7 @@
         public IActionResult Logout()
         {
             this.SignOut();
-            return this.Redirect("/");
+            return this.RedirectToHome();
         }
     }
 }

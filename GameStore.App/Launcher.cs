@@ -2,6 +2,7 @@
 {
     using Data;
     using Infrastructure;
+    using Infrastructure.Mapping;
     using Microsoft.EntityFrameworkCore;
     using SimpleMvc.Framework;
     using SimpleMvc.Framework.Routers;
@@ -15,10 +16,14 @@
             {
                 db.Database.Migrate();
             }
+
+            AutoMapperConfiguration.Initialize();
         }
 
         public static void Main()
             => MvcEngine.Run(
-                new WebServer(1337, DependencyControllerRouter.Get(), new ResourceRouter()));
+                new WebServer(1337, 
+                    DependencyControllerRouter.Get(), 
+                    new ResourceRouter()));
     }
 }

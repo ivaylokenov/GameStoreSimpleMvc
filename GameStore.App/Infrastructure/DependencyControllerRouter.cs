@@ -30,6 +30,7 @@
 
             container.Register<IUserService, UserService>();
             container.Register<IGameService, GameService>();
+            container.Register<IOrderService, OrderService>();
             container.Register<GameStoreDbContext>(Lifestyle.Scoped);
 
             container.Verify();

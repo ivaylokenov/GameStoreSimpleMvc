@@ -1,8 +1,8 @@
 ﻿namespace GameStore.App.Controllers
 {
     using Data.Models;
+    using Infrastructure;
     using Models.Games;
-    using Services;
     using Services.Contracts;
     using SimpleMvc.Framework.Attributes.Methods;
     using SimpleMvc.Framework.Contracts;
@@ -23,7 +23,7 @@
         {
             if (!this.IsAdmin)
             {
-                return this.Redirect("/");
+                return this.RedirectToHome();
             }
 
             return this.View();
@@ -34,7 +34,7 @@
         {
             if (!this.IsAdmin)
             {
-                return this.Redirect("/");
+                return this.RedirectToHome();
             }
 
             if (!this.IsValidModel(model))
@@ -52,14 +52,14 @@
                 model.VideoId,
                 model.ReleaseDate);
 
-            return this.Redirect("/admin/all");
+            return this.RedirectToAllGames();
         }
 
         public IActionResult Edit(int id)
         {
             if (!this.IsAdmin)
             {
-                return this.Redirect("/");
+                return this.RedirectToHome();
             }
 
             var game = this.games.GetById(id);
@@ -79,7 +79,7 @@
         {
             if (!this.IsAdmin)
             {
-                return this.Redirect("/");
+                return this.RedirectToHome();
             }
 
             if (!this.IsValidModel(model))
@@ -98,14 +98,14 @@
                 model.VideoId,
                 model.ReleaseDate);
 
-            return this.Redirect("/admin/all");
+            return this.RedirectToAllGames();
         }
 
         public IActionResult Delete(int id)
         {
             if (!this.IsAdmin)
             {
-                return this.Redirect("/");
+                return this.RedirectToHome();
             }
 
             var game = this.games.GetById(id);
@@ -126,7 +126,7 @@
         {
             if (!this.IsAdmin)
             {
-                return this.Redirect("/");
+                return this.RedirectToHome();
             }
 
             var game = this.games.GetById(id);
@@ -138,29 +138,19 @@
 
             this.games.Delete(id);
 
-            return this.Redirect("/admin/all");
+            return this.RedirectToAllGames();
         }
 
         public IActionResult All()
         {
             if (!this.IsAdmin)
             {
-                return this.Redirect("/");
+                return this.RedirectToHome();
             }
 
             var allGames = this.games
-                .All()
-                .Select(g => $@"
-                    <tr>
-                        <td>{g.Id}</td>
-                        <td>{g.Name}</td>
-                        <td>{g.Size} GB</td>
-                        <td>{g.Price} &euro;</td>
-                        <td>
-                            <a class=""btn btn-warning btn-sm"" href=""/admin/edit?id={g.Id}"">Edit</a>
-                            <a class=""btn btn-danger btn-sm"" href=""/admin/delete?id={g.Id}"">Delete</a>
-                        </td>
-                    </tr>");
+                .All<GameListingAdminModel>()
+                .Select(g => g.ToHtml());
 
             this.ViewModel["games"] = string.Join(string.Empty, allGames);
 
@@ -177,5 +167,8 @@
             this.ViewModel["video-id"] = game.VideoId;
             this.ViewModel["release-date"] = game.ReleaseDate.ToString("yyyy-MM-dd");
         }
+
+        private IActionResult RedirectToAllGames()
+            => this.Redirect("/admin/all");
     }
 }
