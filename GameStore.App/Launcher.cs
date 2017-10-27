@@ -1,6 +1,7 @@
 ﻿namespace GameStore.App
 {
     using Data;
+    using Infrastructure;
     using Microsoft.EntityFrameworkCore;
     using SimpleMvc.Framework;
     using SimpleMvc.Framework.Routers;
@@ -18,6 +19,6 @@
 
         public static void Main()
             => MvcEngine.Run(
-                new WebServer(1337, new ControllerRouter(), new ResourceRouter()));
+                new WebServer(1337, DependencyControllerRouter.Get(), new ResourceRouter()));
     }
 }

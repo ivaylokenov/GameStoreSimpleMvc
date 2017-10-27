@@ -7,40 +7,39 @@
 
     public class UserService : IUserService
     {
+        private readonly GameStoreDbContext db;
+
+        public UserService(GameStoreDbContext db)
+        {
+            this.db = db;
+        }
+
         public bool Create(string email, string password, string name)
         {
-            using (var db = new GameStoreDbContext())
+            if (this.db.Users.Any(u => u.Email == email))
             {
-                if (db.Users.Any(u => u.Email == email))
-                {
-                    return false;
-                }
-
-                var isAdmin = !db.Users.Any();
-
-                var user = new User
-                {
-                    Email = email,
-                    Name = name,
-                    Password = password,
-                    IsAdmin = isAdmin
-                };
-
-                db.Add(user);
-                db.SaveChanges();
-
-                return true;
+                return false;
             }
+
+            var isAdmin = !db.Users.Any();
+
+            var user = new User
+            {
+                Email = email,
+                Name = name,
+                Password = password,
+                IsAdmin = isAdmin
+            };
+
+            db.Add(user);
+            db.SaveChanges();
+
+            return true;
         }
 
         public bool UserExists(string email, string password)
-        {
-            using (var db = new GameStoreDbContext())
-            {
-                return db
-                    .Users
-                    .Any(u => u.Email == email && u.Password == password);
-            }
-        }
+            => this.db
+                .Users
+                .Any(u => u.Email == email && u.Password == password);
     }
 }

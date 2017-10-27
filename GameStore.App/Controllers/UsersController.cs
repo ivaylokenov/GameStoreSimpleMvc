@@ -14,9 +14,9 @@
 
         private IUserService users;
 
-        public UsersController()
+        public UsersController(IUserService users)
         {
-            this.users = new UserService();
+            this.users = users;
         }
 
         public IActionResult Register() => this.View();

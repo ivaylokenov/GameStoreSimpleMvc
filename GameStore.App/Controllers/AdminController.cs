@@ -14,9 +14,9 @@
 
         private readonly IGameService games;
 
-        public AdminController()
+        public AdminController(IGameService games)
         {
-            this.games = new GameService();
+            this.games = games;
         }
 
         public IActionResult Add()

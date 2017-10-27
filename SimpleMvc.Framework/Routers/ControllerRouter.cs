@@ -60,6 +60,9 @@
             }
         }
 
+        protected virtual Controller CreateController(Type controllerType)
+            => Activator.CreateInstance(controllerType) as Controller;
+
         private void PrepareControllerAndActionNames(IHttpRequest request)
         {
             var pathParts = request.Path.Split(
@@ -146,7 +149,7 @@
                 return null;
             }
 
-            this.controllerInstance = Activator.CreateInstance(controllerType) as Controller;
+            this.controllerInstance = this.CreateController(controllerType);
             return this.controllerInstance;
         }
         
